@@ -30,31 +30,15 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 10.13.1
-          run_install: true
+          run_install: false
 
-      - name: Show pnpm list root and .github-actions
-        run: |
-          echo "pnpm list at root:"
-          pnpm list --depth 0
-          echo ""
-          echo "pnpm list at .github-actions:"
-          pnpm list --depth 0 --filter .github-actions || echo "Could not list .github-actions"
+      - name: Install dependencies in .github-actions
+        run: pnpm install
+        working-directory: .github-actions
 
       - name: Check tsx availability (.github-actions)
         run: pnpm exec tsx --version
         working-directory: .github-actions
-
-      - name: Check tsx in node_modules/.bin (.github-actions)
-        run: |
-          if [ -x .github-actions/node_modules/.bin/tsx ]; then
-            echo "tsx executable found in .github-actions/node_modules/.bin"
-            ls -l .github-actions/node_modules/.bin/tsx
-          else
-            echo "tsx NOT found in .github-actions/node_modules/.bin"
-          fi
-
-      - name: Run tsx with pnpm exec from root
-        run: pnpm exec tsx --version
 
       - run: pnpm exec tsx scripts/sync-notion.ts
         working-directory: .github-actions
