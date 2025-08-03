@@ -26,11 +26,15 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: 18
+          node-version: 22
+          cache: 'pnpm'
 
-      - run: npm ci
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.13.1
+          run_install: true
 
-      - run: npx tsx scripts/sync-notion.ts
+      - run: pnpm exec tsx scripts/sync-notion.ts
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
