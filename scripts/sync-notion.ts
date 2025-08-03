@@ -40,7 +40,8 @@ async function run() {
       ]
     });
 
-    console.log("allPages", allPages)
+    console.log("allPages[0]", allPages.results[0])
+    console.log("allPages[0]", allPages.results[0].properties)
 
     const searchResult = allPages.results.find((page: any) => {
       const idProp = page.properties[propId]
