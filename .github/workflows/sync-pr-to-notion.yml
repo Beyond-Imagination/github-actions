@@ -33,44 +33,9 @@ jobs:
           run_install: true
 
       - name: Install dependencies in github-actions
-        run: pnpm install
+        run: pnpm install --no-workspace-root-check
         working-directory: .github-actions
-
-      - name: Show current directory & list files
-        run: |
-          pwd
-          ls -la
-          ls -la .github-actions
-          ls -la .github-actions/scripts
-
-      - name: Show workspace config files
-        run: |
-          if [ -f pnpm-workspace.yaml ]; then
-            echo "pnpm-workspace.yaml contents:"
-            cat pnpm-workspace.yaml
-          else
-            echo "pnpm-workspace.yaml not found"
-          fi
-          if [ -f package.json ]; then
-            echo "Root package.json dependencies:"
-            cat package.json | jq '.dependencies, .devDependencies'
-          else
-            echo "Root package.json not found"
-          fi
-          if [ -f .github-actions/package.json ]; then
-            echo ".github-actions/package.json dependencies:"
-            cat .github-actions/package.json | jq '.dependencies, .devDependencies'
-          else
-            echo ".github-actions/package.json not found"
-          fi
-
-      - name: List node_modules and .bin in root and .github-actions
-        run: |
-          echo "Root node_modules/.bin contents:"
-          ls -la node_modules/.bin || echo "No root node_modules/.bin"
-          echo ""
-          echo ".github-actions node_modules/.bin contents:"
-          ls -la .github-actions/node_modules/.bin || echo "No .github-actions node_modules/.bin"
+      - run: ls -la .github-actions/node_modules/.bin
 
       - name: Show pnpm list root and .github-actions
         run: |
