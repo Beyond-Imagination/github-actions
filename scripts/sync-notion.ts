@@ -8,9 +8,9 @@ const notion = new Client({ auth: process.env.NOTION_TOKEN });
 async function run() {
   try {
     const dbId = process.env.NOTION_DATABASE_ID!;
-    const propId = process.env.NOTION_PROP_ID || "ID";
-    const propStatus = process.env.NOTION_PROP_STATUS || "상태";
-    const propPR = process.env.NOTION_PROP_PR || "GitHub Pull Requests";
+    const propId = "ID";
+    const propStatus = "상태";
+    const propPR = "GitHub Pull Requests";
 
     const { pull_request: pr } = github.context.payload as any;
     if (!pr) throw new Error("No pull request context available");
