@@ -24,6 +24,8 @@ jobs:
           version: 10.13.1
           run_install: true
 
+      - run: pnpm add -D tsx
+      
       - run: pnpm exec tsx scripts/sync-notion.ts
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
