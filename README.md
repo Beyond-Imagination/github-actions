@@ -29,7 +29,7 @@ on:
 
 jobs:
   call-notion-sync:
-    uses: Beyond-Imagination/github-actions/.github/workflows/sync-notion.yml@main
+    uses: Beyond-Imagination/github-actions/.github/workflows/sync-pr-to-notion.yml@main
     secrets:
       NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
       NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
