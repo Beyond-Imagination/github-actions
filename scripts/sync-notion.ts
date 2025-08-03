@@ -39,14 +39,11 @@ async function run() {
         }
       ]
     });
-
-    console.log("allPages[0]", allPages.results[0])
-    console.log("allPages[0]", allPages.results[0].properties)
-
+    
     const searchResult = allPages.results.find((page: any) => {
       const idProp = page.properties[propId]
       if(!idProp || idProp.type !== 'unique_id') return false;
-      const fullId = idProp.unique_id?.prefix + idProp.unique_id?.number;
+      const fullId = idProp.unique_id?.prefix + "-" + idProp.unique_id?.number;
       return fullId === documentId;
     })
 
