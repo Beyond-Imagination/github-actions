@@ -34,7 +34,7 @@ async function run() {
       page_size: 100,
       sorts: [
         {
-          property: "created_time",
+          property: "생성 일시",
           direction: "descending",
         }
       ]
