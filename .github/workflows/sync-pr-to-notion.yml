@@ -15,6 +15,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Checkout github-actions repo
+        uses: actions/checkout@v3
+        with:
+          repository: Beyond-Imagination/github-actions
+          path: .github-actions
+
       - uses: actions/setup-node@v3
         with:
           node-version: 22.17.1
@@ -24,7 +30,7 @@ jobs:
           version: 10.13.1
           run_install: true
 
-      - run: pnpm dlx tsx scripts/sync-notion.ts
+      - run: pnpm dlx tsx .github-actions/scripts/sync-notion.ts
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
