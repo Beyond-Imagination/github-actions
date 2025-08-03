@@ -1,21 +1,12 @@
 name: Sync PR to Notion
 
 on:
-  # 다른 레포에서 호출하는 로직
-  # workflow_call:
-  #   secrets:
-  #     NOTION_TOKEN:
-  #       required: true
-  #     NOTION_DATABASE_ID:
-  #       required: true
-  #     NOTION_PROP_ID:
-  #       required: true
-  #     NOTION_PROP_STATUS:
-  #       required: true
-  #     NOTION_PROP_PR:
-  #       required: true
-  pull_request:
-    types: [opened, reopened, synchronize, closed]
+  workflow_call:
+    secrets:
+      NOTION_TOKEN:
+        required: true
+      NOTION_DATABASE_ID:
+        required: true
 
 jobs:
   sync-notion:
