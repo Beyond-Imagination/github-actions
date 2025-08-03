@@ -32,13 +32,6 @@ jobs:
           version: 10.13.1
           run_install: true
 
-      - name: Install dependencies in github-actions
-        run: pnpm install
-        env:
-          PNPM_WORKSPACE_ROOT: false
-        working-directory: .github-actions
-      - run: ls -la .github-actions/node_modules/.bin
-
       - name: Show pnpm list root and .github-actions
         run: |
           echo "pnpm list at root:"
@@ -48,14 +41,14 @@ jobs:
           pnpm list --depth 0 --filter .github-actions || echo "Could not list .github-actions"
 
       - name: Check tsx availability (.github-actions)
-        run: tsx --version
+        run: pnpm exec tsx --version
         working-directory: .github-actions
 
       - name: Check tsx in node_modules/.bin (.github-actions)
         run: |
           if [ -x .github-actions/node_modules/.bin/tsx ]; then
             echo "tsx executable found in .github-actions/node_modules/.bin"
-            .github-actions/node_modules/.bin/tsx --version
+            ls -l .github-actions/node_modules/.bin/tsx
           else
             echo "tsx NOT found in .github-actions/node_modules/.bin"
           fi
