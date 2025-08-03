@@ -20,6 +20,9 @@ async function run() {
     const { pull_request: pr } = github.context.payload as any;
     if (!pr) throw new Error("No pull request context available");
 
+
+    console.log("pr", pr)
+
     const branch = pr.head.ref;
     const prUrl = pr.html_url;
     const prState = pr.merged ? "완료" : pr.state === "open" ? "진행 중" : "";
@@ -39,7 +42,7 @@ async function run() {
         }
       ]
     });
-    
+
     const searchResult = allPages.results.find((page: any) => {
       const idProp = page.properties[propId]
       if(!idProp || idProp.type !== 'unique_id') return false;
@@ -65,7 +68,7 @@ async function run() {
     };
     if (prState) {
       update.properties[propStatus] = {
-        select: { name: prState },
+        status: { name: prState },
       };
     }
 
