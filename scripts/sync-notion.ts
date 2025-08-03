@@ -36,11 +36,13 @@ async function run() {
       database_id: dbId,
       filter: {
         property: propId,
-        title: {
+        rich_text: {
           equals: documentId,
         },
       },
     });
+
+    console.log("searchReasult", searchResult)
 
     if (searchResult.results.length === 0) {
       throw new Error(`No Notion page found with ID: ${documentId}`);
