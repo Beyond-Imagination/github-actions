@@ -28,27 +28,34 @@ async function run() {
     if (!match) throw new Error("No matching document ID in branch name");
     const documentId = match[1];
 
-    console.log("propId", propId)
-    console.log("title", documentId)
-
     // 🔍 Find the Notion page with the matching ID
-    const searchResult = await notion.databases.query({
+    const allPages = await notion.databases.query({
       database_id: dbId,
-      filter: {
-        property: propId,
-        rich_text: {
-          equals: documentId,
-        },
-      },
+      page_size: 100,
+      sorts: [
+        {
+          property: "created_time",
+          direction: "descending",
+        }
+      ]
     });
+
+    console.log("allPages", allPages)
+
+    const searchResult = allPages.results.find((page: any) => {
+      const idProp = page.properties[propId]
+      if(!idProp || idProp.type !== 'unique_id') return false;
+      const fullId = idProp.unique_id?.prefix + idProp.unique_id?.number;
+      return fullId === documentId;
+    })
 
     console.log("searchReasult", searchResult)
 
-    if (searchResult.results.length === 0) {
+    if (!searchResult) {
       throw new Error(`No Notion page found with ID: ${documentId}`);
     }
 
-    const pageId = searchResult.results[0].id;
+    const pageId = searchResult.id;
 
     // 📝 Update the page
     const update: any = {
