@@ -31,6 +31,71 @@ jobs:
         with:
           version: 10.13.1
           run_install: true
+          
+      - name: Show current directory & list files
+        run: |
+          pwd
+          ls -la
+          ls -la .github-actions
+          ls -la .github-actions/scripts
+
+      - name: Show workspace config files
+        run: |
+          if [ -f pnpm-workspace.yaml ]; then
+            echo "pnpm-workspace.yaml contents:"
+            cat pnpm-workspace.yaml
+          else
+            echo "pnpm-workspace.yaml not found"
+          fi
+          if [ -f package.json ]; then
+            echo "Root package.json dependencies:"
+            cat package.json | jq '.dependencies, .devDependencies'
+          else
+            echo "Root package.json not found"
+          fi
+          if [ -f .github-actions/package.json ]; then
+            echo ".github-actions/package.json dependencies:"
+            cat .github-actions/package.json | jq '.dependencies, .devDependencies'
+          else
+            echo ".github-actions/package.json not found"
+          fi
+
+      - name: List node_modules and .bin in root and .github-actions
+        run: |
+          echo "Root node_modules/.bin contents:"
+          ls -la node_modules/.bin || echo "No root node_modules/.bin"
+          echo ""
+          echo ".github-actions node_modules/.bin contents:"
+          ls -la .github-actions/node_modules/.bin || echo "No .github-actions node_modules/.bin"
+
+      - name: Show pnpm list root and .github-actions
+        run: |
+          echo "pnpm list at root:"
+          pnpm list --depth 0
+          echo ""
+          echo "pnpm list at .github-actions:"
+          pnpm list --depth 0 --filter .github-actions || echo "Could not list .github-actions"
+
+      - name: Check tsx availability (root)
+        run: |
+          if command -v tsx >/dev/null 2>&1; then
+            echo "tsx is available globally"
+            tsx --version
+          else
+            echo "tsx is NOT available globally"
+          fi
+
+      - name: Check tsx in node_modules/.bin (root)
+        run: |
+          if [ -x node_modules/.bin/tsx ]; then
+            echo "tsx executable found in root node_modules/.bin"
+            node_modules/.bin/tsx --version
+          else
+            echo "tsx NOT found in root node_modules/.bin"
+          fi
+
+      - name: Run tsx with pnpm exec from root
+        run: pnpm exec tsx --version
 
       - run: pnpm exec tsx .github-actions/scripts/sync-notion.ts
         env:
