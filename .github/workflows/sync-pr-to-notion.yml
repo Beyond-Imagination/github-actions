@@ -33,7 +33,9 @@ jobs:
           run_install: true
 
       - name: Install dependencies in github-actions
-        run: pnpm install --no-workspace-root-check
+        run: pnpm install
+        env:
+          PNPM_WORKSPACE_ROOT: false
         working-directory: .github-actions
       - run: ls -la .github-actions/node_modules/.bin
 
