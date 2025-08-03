@@ -1,0 +1,19 @@
+{
+  "name": "org-actions-template",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsx scripts/sync-notion.ts"
+  },
+  "dependencies": {
+    "@actions/core": "^1.10.0",
+    "@actions/github": "^5.0.0",
+    "@notionhq/client": "^4.0.1",
+    "tsx": "^3.12.7"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.4"
+  }
+}
