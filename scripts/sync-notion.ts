@@ -12,6 +12,11 @@ async function run() {
     const propStatus = "상태";
     const propPR = "GitHub Pull Requests";
 
+    // 데이터베이스 정보 받아오기 (속성 타입 포함)
+    const dbInfo = await notion.databases.retrieve({ database_id: dbId });
+    console.log("Database properties info:", JSON.stringify(dbInfo.properties, null, 2));
+
+
     const { pull_request: pr } = github.context.payload as any;
     if (!pr) throw new Error("No pull request context available");
 
