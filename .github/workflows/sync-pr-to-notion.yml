@@ -33,7 +33,7 @@ jobs:
           run_install: false
 
       - name: Install dependencies in .github-actions
-        run: pnpm install
+        run: pnpm install --no-frozen-lockfile
         working-directory: .github-actions
 
       - name: Check tsx availability (.github-actions)
