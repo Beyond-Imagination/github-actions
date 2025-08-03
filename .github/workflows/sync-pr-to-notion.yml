@@ -36,14 +36,6 @@ jobs:
         run: pnpm install
         working-directory: .github-actions
 
-      - name: Check installed binaries
-        run: ls -la node_modules/.bin
-        working-directory: .github-actions
-
-      - name: Check tsx version
-        run: npx tsx --version
-        working-directory: .github-actions
-
       - run: pnpm exec tsx scripts/sync-notion.ts
         working-directory: .github-actions
         env:
