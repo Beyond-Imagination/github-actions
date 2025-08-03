@@ -28,12 +28,15 @@ async function run() {
     if (!match) throw new Error("No matching document ID in branch name");
     const documentId = match[1];
 
+    console.log("propId", propId)
+    console.log("title", documentId)
+
     // 🔍 Find the Notion page with the matching ID
     const searchResult = await notion.databases.query({
       database_id: dbId,
       filter: {
         property: propId,
-        rich_text: {
+        title: {
           equals: documentId,
         },
       },
