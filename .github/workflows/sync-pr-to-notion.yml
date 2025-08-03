@@ -13,15 +13,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 호출한 레포 checkout
-      - uses: actions/checkout@v3
-
-      # github-actions 레포도 추가로 clone
       - name: Checkout github-actions repo
         uses: actions/checkout@v3
         with:
           repository: Beyond-Imagination/github-actions
-          path: .github-actions
+          path: .
 
       - uses: actions/setup-node@v3
         with:
@@ -30,18 +26,9 @@ jobs:
       - uses: pnpm/action-setup@v2
         with:
           version: 10.13.1
-          run_install: false
-
-      - name: Install dependencies in .github-actions
-        run: pnpm install --no-frozen-lockfile
-        working-directory: .github-actions
-
-      - name: Check tsx availability (.github-actions)
-        run: pnpm exec tsx --version
-        working-directory: .github-actions
+          run_install: true
 
       - run: pnpm exec tsx scripts/sync-notion.ts
-        working-directory: .github-actions
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
