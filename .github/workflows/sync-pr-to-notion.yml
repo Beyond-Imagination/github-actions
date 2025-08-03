@@ -31,7 +31,11 @@ jobs:
         with:
           version: 10.13.1
           run_install: true
-          
+
+      - name: Install dependencies in github-actions
+        run: pnpm install
+        working-directory: .github-actions
+
       - name: Show current directory & list files
         run: |
           pwd
@@ -76,28 +80,24 @@ jobs:
           echo "pnpm list at .github-actions:"
           pnpm list --depth 0 --filter .github-actions || echo "Could not list .github-actions"
 
-      - name: Check tsx availability (root)
-        run: |
-          if command -v tsx >/dev/null 2>&1; then
-            echo "tsx is available globally"
-            tsx --version
-          else
-            echo "tsx is NOT available globally"
-          fi
+      - name: Check tsx availability (.github-actions)
+        run: tsx --version
+        working-directory: .github-actions
 
-      - name: Check tsx in node_modules/.bin (root)
+      - name: Check tsx in node_modules/.bin (.github-actions)
         run: |
-          if [ -x node_modules/.bin/tsx ]; then
-            echo "tsx executable found in root node_modules/.bin"
-            node_modules/.bin/tsx --version
+          if [ -x .github-actions/node_modules/.bin/tsx ]; then
+            echo "tsx executable found in .github-actions/node_modules/.bin"
+            .github-actions/node_modules/.bin/tsx --version
           else
-            echo "tsx NOT found in root node_modules/.bin"
+            echo "tsx NOT found in .github-actions/node_modules/.bin"
           fi
 
       - name: Run tsx with pnpm exec from root
         run: pnpm exec tsx --version
 
-      - run: pnpm exec tsx .github-actions/scripts/sync-notion.ts
+      - run: pnpm exec tsx scripts/sync-notion.ts
+        working-directory: .github-actions
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
