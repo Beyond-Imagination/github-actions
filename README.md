@@ -1,4 +1,4 @@
-# org-actions-template  
+# notion - github auto sync
 노션 - 깃허브 연동 자동화 레포지토리
 
 ## 기능 안내
