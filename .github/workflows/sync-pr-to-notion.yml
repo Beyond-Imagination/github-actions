@@ -23,7 +23,11 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 22.17.1
-          cache: 'pnpm'
+      
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 10.13.1
+          run_install: true
 
       - name: Cache pnpm store
         uses: actions/cache@v3
@@ -32,11 +36,6 @@ jobs:
           key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ runner.os }}-pnpm-
-
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 10.13.1
-          run_install: true
 
       - run: pnpm exec tsx scripts/sync-notion.ts
         env:
