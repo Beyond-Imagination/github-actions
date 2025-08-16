@@ -18,10 +18,20 @@ jobs:
         with:
           repository: Beyond-Imagination/github-actions
           path: .
+          fetch-depth: 1
 
       - uses: actions/setup-node@v3
         with:
           node-version: 22.17.1
+          cache: 'pnpm'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-
 
       - uses: pnpm/action-setup@v2
         with:
