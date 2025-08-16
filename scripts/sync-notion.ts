@@ -24,23 +24,38 @@ async function run() {
     const documentId = match[1];
 
     // 🔍 Find the Notion page with the matching ID
-    const allPages = await notion.databases.query({
-      database_id: dbId,
-      page_size: 100,
-      sorts: [
-        {
-          property: "생성 일시",
-          direction: "descending",
-        }
-      ]
-    });
+    let cursor: string | undefined = undefined;
+    let searchResult: any = null;
 
-    const searchResult = allPages.results.find((page: any) => {
-      const idProp = page.properties[propId]
-      if(!idProp || idProp.type !== 'unique_id') return false;
-      const fullId = idProp.unique_id?.prefix + "-" + idProp.unique_id?.number;
-      return fullId === documentId;
-    })
+    while (true) {
+      const response = await notion.databases.query({
+        database_id: dbId,
+        page_size: 100,
+        start_cursor: cursor,
+        sorts: [
+          {
+            property: "생성 일시",
+            direction: "descending",
+          },
+        ],
+      });
+
+      const found = response.results.find((page: any) => {
+        const idProp = page.properties[propId];
+        if (!idProp || idProp.type !== "unique_id") return false;
+        const fullId =
+          idProp.unique_id?.prefix + "-" + idProp.unique_id?.number;
+        return fullId === documentId;
+      });
+
+      if (found) {
+        searchResult = found;
+        break;
+      }
+
+      if (!response.has_more) break;
+      cursor = response.next_cursor ?? undefined;
+    }
 
     if (!searchResult) {
       throw new Error(`No Notion page found with ID: ${documentId}`);
